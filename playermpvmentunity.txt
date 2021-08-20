@@ -1,0 +1,76 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Movment : MonoBehaviour
+{
+    public float moveForce = 10f;
+    public float jumpForce = 11f;
+
+
+
+    private float movmentX;
+
+    public Rigidbody2D myBody;
+
+    private SpriteRenderer sr;
+    
+    private Animator anim;
+    private string Walk_Animation = "Walk";
+    private void Awake()
+    {
+        myBody = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
+        sr = GetComponent<SpriteRenderer>();    
+    }
+
+
+    void Start()
+    {
+
+    }
+
+    private void Update()
+    {
+        PlayerMovment();
+        AnimatePlayer();
+        playerJump();
+
+    }
+ 
+    void PlayerMovment()
+    {
+        movmentX = Input.GetAxisRaw("Horizontal");
+        transform.position += new Vector3(movmentX, 0f, 0f) * Time.deltaTime * moveForce;
+
+    }
+
+    void AnimatePlayer()
+    {
+        
+        if (movmentX > 0)
+        {
+            anim.SetBool(Walk_Animation, true);
+            sr.flipX = false;
+        }
+        else if (movmentX < 0){
+            anim.SetBool(Walk_Animation, true);
+            sr.flipX = true;
+
+        }
+
+        else
+        {
+            anim.SetBool(Walk_Animation, false);
+        }
+    }
+
+    void playerJump()
+    {
+        if (Input.GetButtonUp("Jump"))
+        {
+            myBody.AddForce(new Vector2(0f, jumpForce) , ForceMode2D.Impulse);
+        }
+    }
+}
+ 
